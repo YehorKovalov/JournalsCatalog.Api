@@ -8,9 +8,9 @@ public interface IJournalService
 
     GetAllJournalsResponse<JournalDto> GetAllJournalsOrEmpty();
 
-    GetJournalByIdResponse<JournalDto> GetJournalByIdOrDefaultAsync(Guid journalId);
+    GetJournalByIdResponse<JournalDto> GetJournalByIdOrDefault(Guid journalId);
 
-    DeleteJournalByIdResponse<bool> DeleteJournalByIdAsync(Guid journalId);
+    DeleteJournalByIdResponse<bool> DeleteJournalById(Guid journalId);
 
-    UpdateJournalResponse<JournalDto> UpdateJournalByIdAsync(Guid journalId, string fullName, DateTime date, bool attendance);
+    UpdateJournalResponse<JournalDto> UpdateJournalById(Guid journalId, string fullName, DateTime date, bool attendance);
 }

@@ -33,7 +33,7 @@ public class JournalCatalogBffController : ControllerBase
     [ProducesResponseType(typeof(GetJournalByIdResponse<JournalDto>), (int)HttpStatusCode.OK)]
     public IActionResult GetById(Guid id)
     {
-        var result = _journalService.GetJournalByIdOrDefaultAsync(id);
+        var result = _journalService.GetJournalByIdOrDefault(id);
         return Ok(result);
     }
 
@@ -41,7 +41,7 @@ public class JournalCatalogBffController : ControllerBase
     [ProducesResponseType(typeof(UpdateJournalResponse<JournalDto>), (int)HttpStatusCode.OK)]
     public IActionResult Update(Guid id, UpdateJournalRequest request)
     {
-        var result = _journalService.UpdateJournalByIdAsync(id, request.FullName, request.Date, request.Attendance);
+        var result = _journalService.UpdateJournalById(id, request.FullName, request.Date, request.Attendance);
         return Ok(result);
     }
 
@@ -49,7 +49,7 @@ public class JournalCatalogBffController : ControllerBase
     [ProducesResponseType(typeof(DeleteJournalByIdResponse<bool>), (int)HttpStatusCode.OK)]
     public IActionResult Delete(Guid id)
     {
-        var result = _journalService.DeleteJournalByIdAsync(id);
+        var result = _journalService.DeleteJournalById(id);
         return Ok(result);
     }
 }

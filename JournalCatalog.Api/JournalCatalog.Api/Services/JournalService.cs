@@ -63,19 +63,19 @@ public class JournalService : BaseDataService, IJournalService
         });
     }
 
-    public GetJournalByIdResponse<JournalDto> GetJournalByIdOrDefaultAsync(Guid journalId)
+    public GetJournalByIdResponse<JournalDto> GetJournalByIdOrDefault(Guid journalId)
     {
         return ExecuteSafe(() =>
         {
             var result = _journalsStore.Journals.FirstOrDefault(f => f.JournalId == journalId);
             if (result == null)
             {
-                _logger.LogInformation($"{nameof(GetJournalByIdOrDefaultAsync)} ---> Searched journal is null");
+                _logger.LogInformation($"{nameof(GetJournalByIdOrDefault)} ---> Searched journal is null");
                 return new GetJournalByIdResponse<JournalDto> {Data = null};
             }
 
             _logger.LogInformation(
-                $"{nameof(GetJournalByIdOrDefaultAsync)} ---> Searched journal id: {result?.JournalId}");
+                $"{nameof(GetJournalByIdOrDefault)} ---> Searched journal id: {result?.JournalId}");
             return new GetJournalByIdResponse<JournalDto>
             {
                 Data = new JournalDto
@@ -89,21 +89,31 @@ public class JournalService : BaseDataService, IJournalService
         });
     }
 
-    public DeleteJournalByIdResponse<bool> DeleteJournalByIdAsync(Guid journalId)
+    public DeleteJournalByIdResponse<bool> DeleteJournalById(Guid journalId)
     {
         return ExecuteSafe(() =>
         {
-            var result = _journalsStore.Journals.ToList().Remove(new Journal { JournalId = journalId });
-            _logger.LogInformation($"{nameof(DeleteJournalByIdAsync)} ---> result: {result}");
+            var journalToDelete = _journalsStore.Journals.FirstOrDefault(f => f.JournalId == journalId);
+            if (journalToDelete == null)
+            {
+                _logger.LogInformation($"{nameof(DeleteJournalById)} ---> Journal doesn't exist");
+                return new DeleteJournalByIdResponse<bool>
+                {
+                    Data = false
+                };
+            }
+
+            var result = _journalsStore.Journals.ToList().Remove(journalToDelete);
+            _logger.LogInformation($"{nameof(DeleteJournalById)} ---> result: {result}");
             return new DeleteJournalByIdResponse<bool> { Data = result };
         });
     }
 
-    public UpdateJournalResponse<JournalDto> UpdateJournalByIdAsync(Guid journalId, string fullName, DateTime date, bool attendance)
+    public UpdateJournalResponse<JournalDto> UpdateJournalById(Guid journalId, string fullName, DateTime date, bool attendance)
     {
         return ExecuteSafe(() =>
         {
-            _logger.LogInformation($"{nameof(UpdateJournalByIdAsync)} ---> {nameof(journalId)} = {journalId}; {nameof(fullName)} = {fullName}; {nameof(date)} = {date}; {nameof(attendance)} = {attendance};");
+            _logger.LogInformation($"{nameof(UpdateJournalById)} ---> {nameof(journalId)} = {journalId}; {nameof(fullName)} = {fullName}; {nameof(date)} = {date}; {nameof(attendance)} = {attendance};");
             var journalEntity = new Journal
             {
                 JournalId = journalId,
@@ -115,7 +125,7 @@ public class JournalService : BaseDataService, IJournalService
             var searchedJournal = _journalsStore.Journals.FirstOrDefault(f => f.JournalId == journalId);
             if (searchedJournal == null)
             {
-                _logger.LogInformation($"{nameof(UpdateJournalByIdAsync)} ---> Searched journal is null");
+                _logger.LogInformation($"{nameof(UpdateJournalById)} ---> Searched journal is null");
                 return new UpdateJournalResponse<JournalDto> { Data = null };
             }
 

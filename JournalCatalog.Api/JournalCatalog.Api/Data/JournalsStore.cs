@@ -14,7 +14,7 @@ public class JournalsStore
         {
             journals.Add(new Journal
             {
-                JournalId = new Guid(),
+                JournalId = Guid.NewGuid(),
                 Attendance = i % 2 == 0,
                 FullName = $"Test Journal Full Name {i}",
                 Date = DateTime.UtcNow.AddDays(random.Next(20))
